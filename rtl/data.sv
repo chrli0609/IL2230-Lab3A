@@ -6,6 +6,7 @@ module data #(
 ) (
     //Need to have 2*N memory segments (one for each input and ouput in each neuron layer)
 
+
 );
 
 endmodule
