@@ -2,7 +2,8 @@ module parallel_neuron#(
     parameter  N=4,
     parameter  WIDTH=8
 )(
-    input logic signed [WIDTH-1:0] x[N:0],  // data input
+    input logic signed [WIDTH-1:0] x[N-1:0],  // data input
+    input logic signed [WIDTH-1:0] bias,
     input logic signed [WIDTH-1:0] w[N-1:0],  // weight/bias input
     output logic signed [WIDTH-1:0] result
 );
@@ -18,14 +19,14 @@ localparam int FRAC_BITS = (WIDTH == 32) ? 20 : ((WIDTH == 16) ? 10 : 5);
 always_comb begin 
     for(int i=0;i<=N;i=i+1) begin
         if (i==0) begin
-            intermediate_result[i]=x[i]<<FRAC_BITS;
+          intermediate_result[i]=bias<<FRAC_BITS; // bias
         end else begin
-            intermediate_result[i]=w[i-1]*x[i]+intermediate_result[i-1];
+          intermediate_result[i]=w[i-1]*x[i-1]+intermediate_result[i-1];
         end
     end
 end
 
 saturator #(N,WIDTH,FRAC_BITS) SAT (intermediate_result[N],saturation_result);
-sigmoid SIG (saturation_result,result);
+  relu #(WIDTH) RELU (saturation_result,result);
 
 endmodule
