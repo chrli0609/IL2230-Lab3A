@@ -10,12 +10,12 @@ vlog -sv n_neuron_mlp_tb.sv
 vsim work.n_neuron_mlp_tb -voptargs=+acc -debugDB
 
 add wave -position insertpoint \
-sim:/n_neuron_mlp_tb_tb/clk \
-sim:/n_neuron_mlp_tb_tb/rstn \
-sim:/n_neuron_mlp_tb_tb/soc \
-sim:/n_neuron_mlp_tb_tb/in \
-sim:/n_neuron_mlp_tb_tb/bias \
-sim:/n_neuron_mlp_tb_tb/out \
-sim:/n_neuron_mlp_tb_tb/eoc
+sim:/n_neuron_mlp_tb/clk \
+sim:/n_neuron_mlp_tb/rstn \
+sim:/n_neuron_mlp_tb/soc \
+sim:/n_neuron_mlp_tb/in \
+sim:/n_neuron_mlp_tb/bias \
+sim:/n_neuron_mlp_tb/out \
+sim:/n_neuron_mlp_tb/eoc
 
 run 300ns
