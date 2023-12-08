@@ -11,10 +11,9 @@ vsim work.n_neuron_mlp_tb -voptargs=+acc -debugDB
 
 add wave -position insertpoint \
 sim:/n_neuron_mlp_tb/clk \
-sim:/n_neuron_mlp_tb/rstn \
+sim:/n_neuron_mlp_tb/rst_n \
 sim:/n_neuron_mlp_tb/soc \
 sim:/n_neuron_mlp_tb/in \
-sim:/n_neuron_mlp_tb/bias \
 sim:/n_neuron_mlp_tb/out \
 sim:/n_neuron_mlp_tb/eoc
 
