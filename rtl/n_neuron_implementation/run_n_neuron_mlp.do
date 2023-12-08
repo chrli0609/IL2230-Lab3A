@@ -17,4 +17,4 @@ sim:/n_neuron_mlp_tb/in \
 sim:/n_neuron_mlp_tb/out \
 sim:/n_neuron_mlp_tb/eoc
 
-run 300ns
+run 1000ns
