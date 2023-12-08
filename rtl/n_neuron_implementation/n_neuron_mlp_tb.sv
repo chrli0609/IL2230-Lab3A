@@ -65,13 +65,23 @@ end
 always @(posedge clk) begin
 
     //Start computation
-    if (clk_counter == 1) begin
+    if (clk_counter % M == 0) begin
         soc = 1;
         for (int i = 0; i < N; i++) begin
             in[i] = $random;
         end
-        
     end
+
+
+    $display("clk_counter: %d", clk_counter);
+    $display("soc: %b", soc);
+    $display("in[0]: %f", in[0]);
+    $display("in[1]: %f", in[1]);
+    $display("in[2]: %f", in[2]);
+    $display("in[3]: %f", in[3]);
+    $display("in[4]: %f", in[4]);
+    $display("out: %f", out);
+
 
 end
 
