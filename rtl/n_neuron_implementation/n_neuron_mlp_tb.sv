@@ -35,15 +35,30 @@ initial begin
     $dumpvars(1, n_neuron_mlp_tb);
 end
 
+
+always #5 clk = ~clk; //clock generation
+
+/*
 //The clock
-always begin
-    #5;
-    clk = ~clk;
-    if (clk) clk_counter += 1;
+initial begin
+    clk = 0;
+    
+    forever begin
+        $display("sjsangosnsoaoefganefaefa=====================================");
+        $finish;
+        #5;
+        clk = ~clk;
+        if (clk) clk_counter += 1;
+        $display("clk_counter: %d",clk_counter);
+    end
 end
+*/
 
 //Start by resetting the dut
 initial begin
+
+    
+
     clk_counter = 0;
     clk = 0;
     rst_n = 0;
@@ -73,6 +88,9 @@ always @(posedge clk) begin
     end
 
 
+    if (clk_counter == 10) $finish;
+
+
     $display("clk_counter: %d", clk_counter);
     $display("soc: %b", soc);
     $display("in[0]: %f", in[0]);
@@ -84,14 +102,6 @@ always @(posedge clk) begin
 
 
 end
-
-
-
-
-
-
-
-
 
 
 

@@ -1,4 +1,4 @@
-module n_neuron_fsm #(parameter N, parameter M, parameter WIDHT) (
+module n_neuron_fsm #(parameter N, parameter M, parameter WIDTH) (
     input logic clk, rst_n, soc,
     output logic [$clog2(M)-1:0] m_reg,
     output logic weights_read_enable, compute_enable, eoc
