@@ -11,13 +11,14 @@ logic signed [WIDTH-1:0] bias_memory [M-1:0]; //each layer has the same bias
 
 
 
-always_ff @(posedge clk, negedge rst_n) begin
+//always_ff @(posedge clk, negedge rst_n) begin
+always_comb begin
     if(read_enable) begin
         weights_to_neurons = weights_memory[layer_address];
         bias_to_neurons = bias_memory[layer_address];
     end
-
 end
+//end
 
 
 endmodule

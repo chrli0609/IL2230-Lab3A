@@ -10,10 +10,14 @@ logic [$clog2(M)-1:0] m_next;
 //Just to register the eoc signal
 logic eoc_next;
 
+//register the weights_read_enable signal
+logic next_weights_read_enable;
+
 //Define states
-typedef enum logic {
-    IDLE = 1'b0,
-    COMPUTE = 1'b1
+typedef enum logic [1:0] {
+    IDLE = 2'b00,
+    COMPUTE = 2'b01,
+    ERROR = 2'b10
 } state;
 
 state curr_state, next_state;
@@ -33,7 +37,7 @@ always_comb begin
             else next_state = IDLE;
         end
 
-        default : next_state = IDLE;
+        default : next_state = ERROR;
 
     endcase
 end
@@ -47,7 +51,8 @@ always_comb begin
         IDLE : begin
             m_next = 0;
 
-            weights_read_enable = 0;
+            if (next_state == COMPUTE) weights_read_enable = 1;
+            else weights_read_enable = 0;
             compute_enable = 0;
             eoc_next = 0;
         end
@@ -61,19 +66,28 @@ always_comb begin
             if (m_reg == M) eoc_next = 1;
         end
 
+
     endcase
 
 end
 
-
+//For registering the logic signals
 always_ff @(posedge clk, negedge rst_n) begin
     if (!rst_n) begin
         m_reg <= 0;
         eoc <= 0;
     end else begin
+        m_reg <= m_next;
         eoc <= eoc_next;
     end
 
+end
+
+
+//For registering the state
+always_ff @(posedge clk, negedge rst_n) begin
+    if (!rst_n) curr_state = IDLE;
+    else curr_state = next_state;
 end
 
 

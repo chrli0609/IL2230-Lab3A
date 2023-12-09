@@ -10,7 +10,7 @@ module n_neuron_mlp #(
     input logic clk, rst_n, soc,
     input logic signed [WIDTH-1:0] in [N-1:0],
     //input logic signed [WIDTH-1:0] bias,
-    output logic signed [WIDTH-1:0] out,
+    output logic signed [WIDTH-1:0] out [N-1:0],
     output logic eoc
 );
 
@@ -57,6 +57,7 @@ logic read_enable;
 logic [$clog2(M)-1:0] layer_address;
 logic signed [WIDTH-1:0] weights_to_neurons [N-1:0] [N-1:0];
 
+assign read_enable = weights_read_enable;
 
 
 //instantiate weights memory
@@ -80,22 +81,32 @@ assign layer_address = m_reg;
 //instantiate all the neurons
 genvar i;
 generate
-    for (i = 0; i < N; i++) begin
-        parallel_neuron #(N, WIDTH) neron(to_neurons, bias_to_neurons, weights_to_neurons[i], results_from_neurons[i]);
+    for (i = 0; i < N; i++) begin : loop_neuron
+        parallel_neuron #(N, WIDTH) neuron (to_neurons, bias_to_neurons, weights_to_neurons[i], results_from_neurons[i]);
     end
 endgenerate
 
 
+
+//The inputs of the neuron for the first layer should come from top module input while the rest should come from the previous results
 always_ff @(posedge clk, negedge rst_n) begin
     if (!rst_n) begin
         next_inputs_to_neurons <= '{N{'0}};
     end else begin
         next_inputs_to_neurons <= results_from_neurons;
     end
-
 end
 
-//always_comb
+
+//The output should not be asserted until eoc (end of computation) = 1
+//Then the output should come from the output of the neuron
+always_ff @(posedge clk, negedge rst_n) begin
+    if (!rst_n) begin
+        out <= '{N{'0}};
+    end else begin
+        if (eoc) out <= results_from_neurons;
+    end
+end
 
 
 //To handle the inputs to the neurons
